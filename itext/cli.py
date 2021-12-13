@@ -32,9 +32,7 @@ def read(nth):
             t.stop()
             rps = nth / Timer.timers.mean("unpaywall")
             tt = t.timers.total("unpaywall")
-            log.info(
-                f"{int(rps)} entries per second ({pos} entries read in {tt:.2f} seconds)"
-            )
+            log.info(f"{int(rps)} entries per second ({pos} read in {tt:.2f} seconds)")
             t.start()
     t.stop()
     tt = t.timers.total("unpaywall")

@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
 """Library of utility functions for the project"""
 from pathlib import Path
-import json_lines
 import itext
 from loguru import logger as log
 import urllib.request
 from alive_progress import alive_bar
 from typing import Generator
+import gzip
+import jsonlines
+import orjson
 
 
 def reader():
     # type: () -> Generator[dict, None, None]
     """Returns a generator object that yields rows from the unpaywall dataset"""
     path = download_dataset()
-    with json_lines.open(path.as_posix()) as f:
-        for item in f:
-            yield item
+    with gzip.open(path.as_posix()) as stream:
+        with jsonlines.Reader(stream, loads=orjson.loads) as parser:
+            for item in parser:
+                yield item
 
 
 def download_dataset():
